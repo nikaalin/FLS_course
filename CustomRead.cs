@@ -40,11 +40,17 @@ namespace NoteBookConsole
             Console.WriteLine(welcomeText);
             DateTime bth = new DateTime();
             string bthStr = Console.ReadLine();
-            if (!string.IsNullOrEmpty(bthStr))
+            if (string.IsNullOrEmpty(bthStr))
             {
-                while (!DateTime.TryParse(bthStr, out bth))
+                return bth;
+            }
+            while (!DateTime.TryParse(bthStr, out bth))
+            {
+                Console.WriteLine("Incorrect date format. Try again");
+                bthStr = Console.ReadLine();
+                if (string.IsNullOrEmpty(bthStr))
                 {
-                    Console.WriteLine("Incorrect date format. Try again");
+                    break;
                 }
             }
 

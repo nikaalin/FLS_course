@@ -9,14 +9,15 @@ namespace NoteBookConsole
 {
     class NoteBook
     {
-        static Dictionary<int, Note> notes = new Dictionary<int, Note>();
+        private static Dictionary<int, Note> notes = new Dictionary<int, Note>();
 
         static void Main(string[] args)
         {
             PrintProgramInfo();
             while (true)
             {
-                switch (Console.ReadLine())
+                Console.WriteLine("Enter command:");
+                switch (Console.ReadLine().Trim())
                 {
                     case "exit":
                         return;
@@ -30,21 +31,57 @@ namespace NoteBookConsole
                         Delete();
                         break;
                     case "show all":
+                        ShowAll();
                         break;
                     case "show":
+                        Show();
+                        break;
+                    case "help":
+                        PrintProgramInfo();
                         break;
                     default:
-                        Console.WriteLine("Unknown command. Try again");
+                        Console.WriteLine("Unknown command. Please, try again.");
                         break;
                 }
             }
         }
 
-        private static void Show() { }
-        private static void ShowAll() { }
+        private static void Show()
+        {
+            Console.WriteLine("Choose a contact.");
+            string sur = CustomRead.ReadNullSafeString("Enter surname:");
+            string name = CustomRead.ReadNullSafeString("Enter name:");
+            string num = CustomRead.ReadNumber("Enter number:");
+
+            int id = sur.GetHashCode() + name.GetHashCode() + num.GetHashCode();
+            Note n = notes[id];
+
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine($"Contact: {n.Surname} {n.Name} {n.MiddleName}");
+            Console.WriteLine($"Number: {n.Number}");
+            Console.WriteLine($"Country: {n.Country}");
+            Console.WriteLine($"Birthday: {n.Birthday.Date.ToShortDateString()}");
+            Console.WriteLine($"Organization: {n.Org}");
+            Console.WriteLine($"Profession: {n.Prof}");
+            Console.WriteLine($"Notes: {n.OtherNotes}");
+            Console.ResetColor();
+        }
+
+        private static void ShowAll()
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("{0,10}   |{1,10}   |{2,10}", "Surname", "Name", "Number");
+            Console.ResetColor();
+            foreach (var noteWithId in notes)
+            {
+                Note note = noteWithId.Value;
+                Console.WriteLine("{0,10}   |{1,10}   |{2,10}", note.Surname, note.Name, note.Number);
+            }
+        }
 
         private static void Edit()
         {
+            Console.WriteLine("Choose a contact.");
             string sur = CustomRead.ReadNullSafeString("Enter surname:");
             string name = CustomRead.ReadNullSafeString("Enter name:");
             string num = CustomRead.ReadNumber("Enter number:");
@@ -53,14 +90,17 @@ namespace NoteBookConsole
             Note n = notes[id];
             notes.Remove(id);
 
-            PrintEditInfo();
-            Console.WriteLine("Enter field to edit");
+            Console.WriteLine(
+                "You can edit fields: surname, name, number, country, organization, profession, birthday and notes.");
+            Console.WriteLine("If you've finished, enter \"ok\"");
+
             while (true)
             {
+                Console.WriteLine("Enter field to edit:");
                 switch (Console.ReadLine())
                 {
                     case "ok":
-                        return;
+                        goto EndOfLoop;
                     case "surname":
                         Console.WriteLine($"Old surname: {sur}");
                         sur = CustomRead.ReadNullSafeString("Enter new surname:");
@@ -108,10 +148,13 @@ namespace NoteBookConsole
                         break;
                     default:
                         Console.WriteLine("Unknown field. Try again");
-                        break;
+                        continue;
                 }
+
+                Console.WriteLine("Field is edited");
             }
 
+            EndOfLoop:
             n.UpdateId();
             notes.Add(n.Id, n);
             Console.WriteLine("Contact is edited.");
@@ -119,8 +162,6 @@ namespace NoteBookConsole
 
         private static void Delete()
         {
-         
-
             string sur = CustomRead.ReadNullSafeString("Enter surname");
             string name = CustomRead.ReadNullSafeString("Enter name");
             string num = CustomRead.ReadNumber("Enter number");
@@ -133,11 +174,11 @@ namespace NoteBookConsole
 
         private static void Create()
         {
-            string sur = CustomRead.ReadNullSafeString("Enter surname:");
-            string name = CustomRead.ReadNullSafeString("Enter name:");
+            string sur = CustomRead.ReadNullSafeString("Enter surname (required):");
+            string name = CustomRead.ReadNullSafeString("Enter name (required):");
             string mid = CustomRead.ReadString("Enter middle name:");
-            string num = CustomRead.ReadNumber("Enter number:");
-            string country = CustomRead.ReadNullSafeString("Enter country:");
+            string num = CustomRead.ReadNumber("Enter number (required):");
+            string country = CustomRead.ReadNullSafeString("Enter country (required):");
             DateTime bth = CustomRead.ReadDate("Enter birthday:");
             string org = CustomRead.ReadString("Enter organization:");
             string prof = CustomRead.ReadString("Enter profession:");
@@ -158,17 +199,21 @@ namespace NoteBookConsole
             {
                 Console.WriteLine("Same contact exists.");
             }
+
             Console.WriteLine("Contact is created.");
         }
 
         private static void PrintProgramInfo()
         {
-            Console.WriteLine("There are info");
-        }
-        private static void PrintEditInfo()
-        {
-            Console.WriteLine("There are fields to edit");
+            Console.WriteLine("Hello! It's notebook. You can use next commands for work:");
+            Console.WriteLine(" -- new - to create a new contact;");
+            Console.WriteLine(" -- edit - to edit a contact;");
+            Console.WriteLine(" -- delete - to delete a contact;");
+            Console.WriteLine(" -- show all - to show a list of contacts;");
+            Console.WriteLine(" -- show - to show detail info of contact;");
+            Console.WriteLine(" -- exit - to finish a work;");
+            Console.WriteLine(" -- help - to show this info again.");
+            Console.WriteLine("Good luck!");
         }
     }
-
 }
