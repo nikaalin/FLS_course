@@ -81,7 +81,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DAO\ListDaoDanger.cs" />
+    <Compile Include="DAO\DangerDao.cs" />
     <Compile Include="DataSource\DangerExcelManager.cs" />
     <Compile Include="DataSource\ExcelManager.cs" />
     <Compile Include="DataSource\IDSManager.cs" />

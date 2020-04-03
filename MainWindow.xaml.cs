@@ -25,6 +25,7 @@ namespace Lab2
     {
         public MainWindow()
         {
+            InitializeComponent();
             
         }
 

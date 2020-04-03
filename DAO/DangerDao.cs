@@ -6,21 +6,21 @@ using Lab2.Entities;
 
 namespace Lab2.DAO
 {
-    public class DaoDanger: IDao<Danger>
+    public class DangerDao: IDao<Danger>
     {
-        private static DaoDanger instance;
+        private static DangerDao instance;
         private List<Danger> dangerList;
         private IDSManager<Danger> dsManager;
 
-        private DaoDanger()
+        private DangerDao()
         {
             dsManager = DangerExcelManager.GetInstance();
             dangerList = dsManager.GetSourceAsList();
         }
 
-        public static DaoDanger GetInstance()
+        public static DangerDao GetInstance()
         {
-            return instance ?? (instance = new DaoDanger());
+            return instance ?? (instance = new DangerDao());
         }
 
 
