@@ -15,6 +15,7 @@ namespace Lab2.Entities
             IsPrivacyViolation = isPrivacyViolation;
             IsIntegrityViolation = isIntegrityViolation;
             IsAccessViolation = isAccessViolation;
+            ShortInfo = new ShortInfo(){ Name = this.Name, ID = $"УБИ.{this.Id}"};
         }
         public Danger(string[] param)
         {
@@ -26,6 +27,7 @@ namespace Lab2.Entities
             IsPrivacyViolation = (param[5] != "0");
             IsIntegrityViolation = (param[6] != "0");
             IsAccessViolation = (param[7] != "0");
+            ShortInfo = new ShortInfo() {  Name = this.Name, ID = $"УБИ.{this.Id}" };
         }
 
         public int Id { get; }
@@ -36,7 +38,7 @@ namespace Lab2.Entities
         public bool IsPrivacyViolation { get; set; }
         public bool IsIntegrityViolation { get; set; }
         public bool IsAccessViolation { get; set; }
-
+        public ShortInfo ShortInfo { get; }
         public override bool Equals(object oth)
         {
             return Id ==((Danger) oth).Id;
@@ -51,5 +53,22 @@ namespace Lab2.Entities
         {
             return $"{Id} {Name} {Description} {Source} {Objective} {(IsPrivacyViolation?1:0)} {(IsIntegrityViolation?1:0)} {(IsAccessViolation?1:0)}";
         }
+
+        public string GetText()
+        {
+            return $"Описание: {Description}\n " +
+                   $"Источник: {Source} \n" +
+                   $"Объект воздейтсвия: {Objective}\n" +
+                   $"Нарушение конфиденциальности: {(IsPrivacyViolation ? "да" : "нет")}\n" +
+                   $"Нарушение целостности: {(IsIntegrityViolation ? "да" : "Нет")}\n" +
+                   $"Нарушение доступности: {(IsAccessViolation ? "да" : "нет")}\n";
+        }
+
+    }
+
+    public class ShortInfo
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
     }
 }

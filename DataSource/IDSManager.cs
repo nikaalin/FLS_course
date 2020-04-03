@@ -10,6 +10,7 @@ namespace Lab2.DataSource
         void Delete();
         void Repair();
         bool ExistLocal();
+        void SaveLocal(string path);
         List<T> GetSourceAsList();
     }
 }

@@ -39,6 +39,11 @@ namespace Lab2.DataSource
             return File.Exists(localUrl);
         }
 
+        public void SaveLocal(string path)
+        {
+            File.Copy(localUrl, path);
+        }
+
         public abstract List<T> GetSourceAsList();
 
         public abstract void RewriteDataFromList(List<T> list);
