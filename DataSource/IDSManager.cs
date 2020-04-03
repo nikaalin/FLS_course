@@ -9,7 +9,7 @@ namespace Lab2.DataSource
         void RewriteDataFromList(List<T> obs);
         void Delete();
         void Repair();
-
+        bool ExistLocal();
         List<T> GetSourceAsList();
     }
 }
