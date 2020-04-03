@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Lab2.DataSource;
 using Lab2.Entities;
-using Lab2.IDAO;
-using OfficeOpenXml;
-using OfficeOpenXml.Table;
+
 
 namespace Lab2.DAO
 {

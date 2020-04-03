@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Documents;
-using Lab2.Entities;
 
-namespace Lab2.IDAO
+namespace Lab2.DAO
 {
     public interface IDao<T>
     {
@@ -10,7 +9,7 @@ namespace Lab2.IDAO
         void Remove(T t);
         void Remove(int id);
         void Create(T t);
-        Danger Get(int id);
+        T Get(int id);
         List<T> GetAll();
         void Commit();
     }
