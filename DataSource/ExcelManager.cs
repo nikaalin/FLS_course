@@ -10,7 +10,16 @@ namespace Lab2.DataSource
     {
         private const string sourceUrl = "https://bdu.fstec.ru/files/documents/thrlist.xlsx";
         protected const string localUrl = "thrlist.xlsx";
-        private const string prevLocalUrl = "thrlistOld.xlsx";
+        protected const string prevLocalUrl = "thrlistOld.xlsx";
+
+        public string GetLocalFile()
+        {
+            return localUrl;
+        }
+        public string GetOldFile()
+        {
+            return localUrl;
+        }
 
         public void Create()
         {
@@ -19,19 +28,19 @@ namespace Lab2.DataSource
 
         public void UpdateFromRemote()
         {
-            File.Copy(localUrl, prevLocalUrl);
+            File.Copy(localUrl, prevLocalUrl,true);
             downloadFile(sourceUrl, localUrl);
         }
 
         public void Delete()
         {
-            File.Copy(localUrl, prevLocalUrl);
+            File.Copy(localUrl, prevLocalUrl,true);
             File.Delete(localUrl);
         }
 
         public void Repair()
         {
-            File.Copy(prevLocalUrl, localUrl);
+            File.Copy(prevLocalUrl, localUrl, true);
         }
 
         public bool ExistLocal()
@@ -45,7 +54,8 @@ namespace Lab2.DataSource
         }
 
         public abstract List<T> GetSourceAsList();
-
+/*        public abstract Dictionary<T, T> GetDifferentMap();
+*/
         public abstract void RewriteDataFromList(List<T> list);
 
         private void downloadFile(string source, string receiver)

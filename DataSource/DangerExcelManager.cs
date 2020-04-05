@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using Lab2.Entities;
 using OfficeOpenXml;
 
@@ -16,29 +17,20 @@ namespace Lab2.DataSource
         }
         public override List<Danger> GetSourceAsList()
         {
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-            var path = localUrl;
-            var excelData = new List<Danger>();
-            byte[] bin = File.ReadAllBytes(path);
-            using (MemoryStream stream = new MemoryStream(bin))
-            using (ExcelPackage excelPackage = new ExcelPackage(stream))
-            {
-                var sheet = excelPackage.Workbook.Worksheets[0];
-                for (int i = 3; i <= sheet.Dimension.End.Row; i++)
-                {
-                    var row = new string[8];
-                    for (int j = 1; j <= 8; j++)
-                    {
-                        var value = sheet.Cells[i, j].Value.ToString();
-                        row[j - 1] = value;
-                    }
-
-                    excelData.Add(new Danger(row));
-                }
-            }
-
-            return excelData;
+            return Parse(localUrl);
         }
+
+       /* public override Dictionary<Danger, Danger> GetDifferentMap()
+        {
+            var oldDangers = Parse(prevLocalUrl);
+            var newDangers = Parse(localUrl);
+
+            var resultMap = new Dictionary<Danger, Danger>();
+            for (int i = 0; i < newDangers.Count; i++)
+            {
+                resultMap.Add(newDangers[i],oldDangers[i]);
+            }
+        }*/
 
         public override void RewriteDataFromList(List<Danger> list)
         {
@@ -59,6 +51,31 @@ namespace Lab2.DataSource
                     i++;
                 }
             }
+        }
+
+        private  List<Danger> Parse(string path)
+        {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            var excelData = new List<Danger>();
+            byte[] bin = File.ReadAllBytes(path);
+            using (MemoryStream stream = new MemoryStream(bin))
+            using (ExcelPackage excelPackage = new ExcelPackage(stream))
+            {
+                var sheet = excelPackage.Workbook.Worksheets[0];
+                for (int i = 3; i <= sheet.Dimension.End.Row; i++)
+                {
+                    var row = new string[8];
+                    for (int j = 1; j <= 8; j++)
+                    {
+                        var value = sheet.Cells[i, j].Value.ToString();
+                        row[j - 1] = value;
+                    }
+
+                    excelData.Add(new Danger(row));
+                }
+            }
+
+            return excelData;
         }
     }
 }
