@@ -27,13 +27,13 @@ namespace Lab2
 
             var newList = dsManager.GetSourceAsList();
             var oldList = dsManager.GetOldSourceAsList();
-            oldList.Remove(oldList.Last());
-            oldList.Remove(oldList.Last());
 
+            /*oldList.Remove(oldList.Last());
+            oldList.Remove(oldList.Last());
             var last = oldList.Last();
             oldList.Remove(last);
             last.IsIntegrityViolation = !last.IsIntegrityViolation;
-            oldList.Add(last);
+            oldList.Add(last);*/
 
             var listComparator = new DangerListComparator(oldList,newList);
             var changedItems = listComparator.getChangedComponents();

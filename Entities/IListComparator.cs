@@ -8,6 +8,8 @@ namespace Lab2.Entities
         List<T> getNewComponents();
         List<T> getChangedComponents();
         List<ChangedObject> getChangeList(T ob, T oth);
+
+        int GetUpdatedCount();
     }
 
 }

@@ -75,5 +75,10 @@ namespace Lab2.Entities
 
             return changeList;
         }
+
+        public int GetUpdatedCount()
+        {
+            return getChangedComponents().Count + getNewComponents().Count;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using Lab2.Entities;
@@ -49,23 +50,27 @@ namespace Lab2.DataSource
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             var excelData = new List<Danger>();
-            byte[] bin = File.ReadAllBytes(path);
-            using (MemoryStream stream = new MemoryStream(bin))
-            using (ExcelPackage excelPackage = new ExcelPackage(stream))
+            try
             {
-                var sheet = excelPackage.Workbook.Worksheets[0];
-                for (int i = 3; i <= sheet.Dimension.End.Row; i++)
+                byte[] bin = File.ReadAllBytes(path);
+                using (MemoryStream stream = new MemoryStream(bin))
+                using (ExcelPackage excelPackage = new ExcelPackage(stream))
                 {
-                    var row = new string[8];
-                    for (int j = 1; j <= 8; j++)
+                    var sheet = excelPackage.Workbook.Worksheets[0];
+                    for (int i = 3; i <= sheet.Dimension.End.Row; i++)
                     {
-                        var value = sheet.Cells[i, j].Value.ToString();
-                        row[j - 1] = value;
-                    }
+                        var row = new string[8];
+                        for (int j = 1; j <= 8; j++)
+                        {
+                            var value = sheet.Cells[i, j].Value.ToString();
+                            row[j - 1] = value;
+                        }
 
-                    excelData.Add(new Danger(row));
+                        excelData.Add(new Danger(row));
+                    }
                 }
             }
+            catch (Exception) { }
 
             return excelData;
         }

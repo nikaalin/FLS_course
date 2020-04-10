@@ -6,7 +6,7 @@ namespace Lab2.DataSource
     public interface IDSManager<T>
     {
         void Create();
-        void UpdateFromRemote();
+        bool UpdateFromRemote();
         void RewriteDataFromList(List<T> obs);
         void Delete();
         void Repair();

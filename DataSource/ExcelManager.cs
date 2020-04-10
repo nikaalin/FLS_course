@@ -16,6 +16,7 @@ namespace Lab2.DataSource
         {
             return localUrl;
         }
+
         public string GetOldFile()
         {
             return localUrl;
@@ -23,18 +24,26 @@ namespace Lab2.DataSource
 
         public void Create()
         {
-            downloadFile(sourceUrl, localUrl);
+            if (!downloadFile(sourceUrl, localUrl))
+                throw new Exception();
         }
 
-        public void UpdateFromRemote()
+        public bool UpdateFromRemote()
         {
-            File.Copy(localUrl, prevLocalUrl,true);
-            downloadFile(sourceUrl, localUrl);
+            try
+            {
+                File.Copy(localUrl, prevLocalUrl, true);
+            }
+            catch (Exception)
+            {
+            }
+            return downloadFile(sourceUrl, localUrl);
+            
         }
 
         public void Delete()
         {
-            File.Copy(localUrl, prevLocalUrl,true);
+            File.Copy(localUrl, prevLocalUrl, true);
             File.Delete(localUrl);
         }
 
@@ -58,11 +67,19 @@ namespace Lab2.DataSource
 
         public abstract void RewriteDataFromList(List<T> list);
 
-        private void downloadFile(string source, string receiver)
+        private bool downloadFile(string source, string receiver)
         {
-            using (var client = new WebClient())
+            try
             {
-                client.DownloadFile(source, receiver);
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile(source, receiver);
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }
