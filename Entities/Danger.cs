@@ -39,6 +39,18 @@ namespace Lab2.Entities
         public bool IsIntegrityViolation { get; set; }
         public bool IsAccessViolation { get; set; }
         public ShortInfo ShortInfo { get; }
+
+        public bool EqualsByField(Danger oth)
+        {
+            return (Id == oth.Id &&
+                    Name == oth.Name &&
+                    Description == oth.Description &&
+                    Source == oth.Source &&
+                    Objective == oth.Objective &&
+                    IsPrivacyViolation == oth.IsPrivacyViolation &&
+                    IsAccessViolation  == oth.IsAccessViolation &&
+                    IsIntegrityViolation == oth.IsIntegrityViolation);
+        }
         public override bool Equals(object oth)
         {
             return Id ==((Danger) oth).Id;
@@ -70,5 +82,9 @@ namespace Lab2.Entities
     {
         public string ID { get; set; }
         public string Name { get; set; }
+        public override string ToString()
+        {
+            return $"{ID}.{Name}";
+        }
     }
 }

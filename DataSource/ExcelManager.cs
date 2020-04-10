@@ -54,8 +54,8 @@ namespace Lab2.DataSource
         }
 
         public abstract List<T> GetSourceAsList();
-/*        public abstract Dictionary<T, T> GetDifferentMap();
-*/
+        public abstract List<T> GetOldSourceAsList();
+
         public abstract void RewriteDataFromList(List<T> list);
 
         private void downloadFile(string source, string receiver)

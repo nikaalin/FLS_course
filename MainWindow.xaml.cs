@@ -88,7 +88,8 @@ namespace Lab2
             dangers = dsManager.GetSourceAsList();
             DangerDataGrid.UpdateLayout();
 
-
+            DifferentWindow secondWindow = new DifferentWindow(dsManager);
+            secondWindow.Show();
         }
     }
 }

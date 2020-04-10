@@ -1,0 +1,33 @@
+﻿<Window x:Class="Lab2.DifferentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab2"
+        mc:Ignorable="d"
+        Title="Что нового?" Height="375.806" Width="982.258">
+    <Grid Margin="0,0,4,-19.6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="536*"/>
+            <ColumnDefinition Width="539*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="245*"/>
+            <RowDefinition Height="98*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="10*"/>
+
+        </Grid.RowDefinitions>
+
+        <Button Name="DifOk" Content="Я посмотрел" Margin="385,10.2,391,31" Click="CloseSecondWindow" Grid.Row="1" Grid.ColumnSpan="2" />
+
+        <TreeView Name="TreeView"
+                  Margin="0,26,0,48.8" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="962">
+            <TreeViewItem Name="NewItems" Header="Добавлены угрозы: "/>
+            <TreeViewItem Name="ChangedItems" Header="Изменены: "/>
+        </TreeView>
+
+
+    </Grid>
+</Window>

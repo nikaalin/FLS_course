@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Lab2.DataSource
 {
@@ -12,5 +13,6 @@ namespace Lab2.DataSource
         bool ExistLocal();
         void SaveLocal(string path);
         List<T> GetSourceAsList();
+        List<T> GetOldSourceAsList();
     }
 }

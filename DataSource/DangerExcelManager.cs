@@ -20,18 +20,10 @@ namespace Lab2.DataSource
             return Parse(localUrl);
         }
 
-       /* public override Dictionary<Danger, Danger> GetDifferentMap()
+        public override List<Danger> GetOldSourceAsList()
         {
-            var oldDangers = Parse(prevLocalUrl);
-            var newDangers = Parse(localUrl);
-
-            var resultMap = new Dictionary<Danger, Danger>();
-            for (int i = 0; i < newDangers.Count; i++)
-            {
-                resultMap.Add(newDangers[i],oldDangers[i]);
-            }
-        }*/
-
+            return Parse(prevLocalUrl);
+        }
         public override void RewriteDataFromList(List<Danger> list)
         {
             var path = localUrl;
