@@ -127,7 +127,19 @@ namespace Lab2
 
         private void showSuccessDialog()
         {
-            string messageBoxText = "Обновлено Н записей\nИнтересуют подробности?";
+            var newList = dsManager.GetSourceAsList();
+            var oldList = dsManager.GetOldSourceAsList();
+
+            /*oldList.Remove(oldList.Last());
+            oldList.Remove(oldList.Last());
+            var last = oldList.Last();
+            oldList.Remove(last);
+            last.IsIntegrityViolation = !last.IsIntegrityViolation;
+            oldList.Add(last);*/
+
+            var listComparator = new DangerListComparator(oldList, newList);
+
+            string messageBoxText = $"Обновлено {listComparator.GetUpdatedCount()} записей\nИнтересуют подробности?";
             string caption = "Успех!";
             MessageBoxButton button = MessageBoxButton.YesNo;
             MessageBoxImage icon = MessageBoxImage.None;
