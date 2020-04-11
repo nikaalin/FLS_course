@@ -28,7 +28,7 @@ namespace Lab2
         List<Danger> dangers;
         private int currentPage = 0;
         private const int countOfItemsOnPage = 15;
-        private List<ShortInfo> shortDangers;
+        private List<ShortInfo> shortDangers = new List<ShortInfo>();
         private List<ShortInfo> currentSection = new List<ShortInfo>();
         private IDSManager<Danger> dsManager;
 
@@ -39,12 +39,15 @@ namespace Lab2
             shortDangers = new List<ShortInfo>();
             if (!dsManager.ExistLocal())
             {
-                if (showStartDialog())
+                if (!showStartDialog())
                 {
-                    while (startAction())
-                    {
-                    }
+                    MessageBox.Show("....но в таком случае нам будет не с чем работать, так что я загружаю.",
+                        "Интересный ход...", MessageBoxButton.OK, MessageBoxImage.None);
                 }
+                while (startAction())
+                {
+                }
+
             }
 
             dangers = dsManager.GetSourceAsList();
