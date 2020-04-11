@@ -25,5 +25,7 @@
         <DataGrid Name="DangerDataGrid" IsReadOnly="True" Grid.RowSpan="3" Margin="0,0,9.6,0.2" MouseDoubleClick="ShowDangerDetailInfo" />
         <Button Name="UpdateButton" Content="Обновить" Grid.ColumnSpan="2" Margin="10.4,10,21.6,4.4" Grid.Column="1" Click="Update"/>
         <Button Name="SaveButton" Content="Сохранить" Grid.ColumnSpan="2" Margin="10.4,20.6,21.6,2.8" Grid.Column="1" Grid.Row="1" Click="SafeFile"/>
+        <Button Name="PrevButton" Content="↑" Margin="10.4,126.2,34.6,109.2" Grid.Column="1" Grid.Row="2" Click="PrevButton_Click" />
+        <Button Name="NextButton" Content="↓" Margin="10.4,166.2,34.6,69.2" Grid.Column="1" Grid.Row="2" Click="NextButton_Click" />
     </Grid>
 </Window>

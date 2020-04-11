@@ -26,7 +26,10 @@ namespace Lab2
     public partial class MainWindow : Window
     {
         List<Danger> dangers;
+        private int currentPage = 0;
+        private const int countOfItemsOnPage = 15;
         private List<ShortInfo> shortDangers;
+        private List<ShortInfo> currentSection = new List<ShortInfo>();
         private IDSManager<Danger> dsManager;
 
         public MainWindow()
@@ -50,7 +53,8 @@ namespace Lab2
                 shortDangers.Add(danger.ShortInfo);
             }
 
-            DangerDataGrid.ItemsSource = shortDangers;
+            currentSection = shortDangers.GetRange(0, countOfItemsOnPage);
+            DangerDataGrid.ItemsSource = currentSection;
         }
 
         bool startAction()
@@ -114,8 +118,10 @@ namespace Lab2
                 {
                     shortDangers.Add(danger.ShortInfo);
                 }
-                DangerDataGrid.ItemsSource = shortDangers;
+                currentSection = shortDangers.GetRange(0, countOfItemsOnPage);
+                DangerDataGrid.ItemsSource = currentSection;
                 DangerDataGrid.UpdateLayout();
+
                 showSuccessDialog();
                 return false;
             }
@@ -172,6 +178,38 @@ namespace Lab2
                     return false;
                 default: return false;
             }
+        }
+
+        private void PrevButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (--currentPage<0)
+            {
+                currentPage = 0;
+            }
+            currentSection = shortDangers.GetRange(currentPage* countOfItemsOnPage, countOfItemsOnPage);
+            DangerDataGrid.ItemsSource = currentSection;
+            DangerDataGrid.UpdateLayout();
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            var lastPage = shortDangers.Count / 15;
+            var countOfItemsOnLastPage = shortDangers.Count % 15;
+            if (++currentPage *15 > shortDangers.Count)
+            {
+                currentPage = lastPage;
+            }
+
+            if (currentPage==lastPage)
+            {
+                currentSection = shortDangers.GetRange(currentPage * countOfItemsOnPage, countOfItemsOnLastPage);
+            }
+            else
+            {
+                currentSection = shortDangers.GetRange(currentPage * countOfItemsOnPage, countOfItemsOnPage);
+            }
+            DangerDataGrid.ItemsSource = currentSection;
+            DangerDataGrid.UpdateLayout();
         }
     }
 }
