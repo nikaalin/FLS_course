@@ -75,7 +75,7 @@ namespace VigenereCipher
             {
                 if (!abc.Contains(symbol.ToString()))
                 {
-                    throw new KeyException("Некорректный ключю Не надо такю");
+                    throw new KeyException("Некорректный ключ. Не надо так.");
                 }
             }
         }
