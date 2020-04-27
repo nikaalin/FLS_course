@@ -1,0 +1,2 @@
+rootProject.name='VigenereCipher'
+include ':app'

@@ -1,0 +1,36 @@
+package com.example.cipher2.UI
+
+import android.app.Dialog
+import android.os.Bundle
+import android.util.Log
+import com.example.cipher2.ProjectValues
+import com.example.cipher2.R
+import kotlinx.android.synthetic.main.save_dialog.*
+import java.io.File
+
+
+class SaveFileDialog(
+    private val activity: MainActivity
+) : Dialog(activity) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.save_dialog)
+
+
+        saveNamedFileButton.setOnClickListener {
+            ProjectValues.fileNameToSave = fileNameEditText.text.toString()
+            this.dismiss()
+            saveDocx()
+        }
+    }
+
+    private fun saveDocx() {
+        val name = ProjectValues.fileNameToSave
+        val type = ProjectValues.fileTypeToSave
+        val path = activity.getExternalFilesDir(type)?.path
+
+        File("$path/$name.$type").writeText(activity.model.resultText)
+    }
+
+}
+

@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">VigenereCipher</string>
+    <string name="title_decrypt">ДЕШИФРАТОР</string>
+    <string name="title_encrypt">ШИФРАТОР</string>
+
+    <string name="text_key"> Ключ по умолчанию</string>
+    <string name="text_edit_key">Ключ</string>
+    <string name="text_edit_to_encrypt">Текст для шифрования</string>
+
+    <string name="upload_file">Выбрать файл</string>
+    <string name="send_decrypt">Дешифровать</string>
+    <string name="send_encrypt">Зашифровать</string>
+
+    <string name="OK">ОК</string>
+    <string name="save_file">Сохранить файл</string>
+
+    <string name="default_file_name">the_best_coursework</string>
+    <string name="file_name">Имя файла</string>
+
+    <string name="success_text">Файл загружен успешно</string>
+    <string name="source">Исходный текст</string>
+    <string name="destination">Результат</string>
+
+    <string name="format_text">Что будем шифровать?</string>
+    <string name="none_format_text">То, что я сам напишу</string>
+
+    <string name="text_file_is_uploaded">Файл загружен</string>
+</resources>
