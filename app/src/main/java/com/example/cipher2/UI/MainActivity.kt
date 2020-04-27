@@ -12,6 +12,7 @@ import com.example.cipher2.controllers.StringCipherRequest
 import com.example.cipher2.controllers.TxtCipherRequest
 import com.example.cipher2.defaultKey
 import com.example.cipher2.exceptions.ApplicationException
+import com.example.cipher2.exceptions.BadResponseException
 import com.example.cipher2.exceptions.NoFileUploadException
 import com.example.cipher2.exceptions.NoKeyException
 import com.example.cipher2.models.TextModel
@@ -138,6 +139,10 @@ class MainActivity : AppCompatActivity() {
                     MainScope().launch {
                         e.toast(this@MainActivity)
                     }
+                } catch (e: Exception) {
+                    MainScope().launch {
+                        BadResponseException().toast(this@MainActivity)
+                    }
                 } finally {
                     MainScope().launch {
                         buttonSendRequest.isEnabled = true
@@ -147,6 +152,10 @@ class MainActivity : AppCompatActivity() {
             }
         } catch (e: ApplicationException) {
             e.toast(this)
+        } catch (e: Exception) {
+            MainScope().launch {
+                BadResponseException().toast(this@MainActivity)
+            }
         } finally {
             buttonSendRequest.isEnabled = true
 

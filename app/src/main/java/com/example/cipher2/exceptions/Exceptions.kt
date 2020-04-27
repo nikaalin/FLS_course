@@ -24,12 +24,6 @@ class NoFileUploadException: ApplicationException() {
     }
 }
 
-class NoConnectionException: ApplicationException() {
-    override fun toast(activity: Activity) {
-        activity.toast("Нет подключения к сети")
-    }
-}
-
 class BadResponseException: ApplicationException() {
     override fun toast(activity: Activity) {
         activity.toast("Ошибка сервера")
@@ -37,9 +31,3 @@ class BadResponseException: ApplicationException() {
 }
 
 
-class BadRequestException {
-}
-class IllegalFileContentException: Exception() {
-}
-class UnexpectedFileFormatException: Exception() {
-}
