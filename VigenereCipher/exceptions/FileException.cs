@@ -2,11 +2,11 @@
 
 namespace VigenereCipherAPI
 {
-    public class FormatException : ApplicationException
+    public class FileException: ApplicationException
     {
         public override string Message { get; }
 
-        public FormatException(string message) : base()
+        public FileException(string message) : base()
         {
             Message = message;
         }

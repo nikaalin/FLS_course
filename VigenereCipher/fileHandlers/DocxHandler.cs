@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using VigenereCipherAPI;
 
 namespace VigenereCipher
 {
@@ -8,34 +10,41 @@ namespace VigenereCipher
     {
         public static string ParseDocx(string path)
         {
-            string result = "";
-            using (var stream = new MemoryStream())
+            try
             {
-                using (var fileStream = File.OpenRead(path))
+                string result = "";
+                using (var stream = new MemoryStream())
                 {
-
-
-                    var bytes = getStreamBytes(fileStream);
-                    stream.Write(bytes, 0, bytes.Length);
-
-                    using (WordprocessingDocument doc =
-                        WordprocessingDocument.Open(stream, true))
+                    using (var fileStream = File.OpenRead(path))
                     {
-                        foreach (var outer in doc.MainDocumentPart.Document.Body.Descendants())
+
+
+                        var bytes = getStreamBytes(fileStream);
+                        stream.Write(bytes, 0, bytes.Length);
+
+                        using (WordprocessingDocument doc =
+                            WordprocessingDocument.Open(stream, true))
                         {
-                            if (outer is Run)
+                            foreach (var outer in doc.MainDocumentPart.Document.Body.Descendants())
                             {
-                                foreach (var inner in outer.Elements())
+                                if (outer is Run)
                                 {
-                                    result += inner.InnerText;
+                                    foreach (var inner in outer.Elements())
+                                    {
+                                        result += inner.InnerText;
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            return result;
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new FileException("Невозможно прочитать файл");
+            }
         }
 
         

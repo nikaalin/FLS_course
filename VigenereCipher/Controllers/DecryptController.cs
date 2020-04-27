@@ -24,37 +24,45 @@ namespace VigenereCipher.Controllers
                 syncIOFeature.AllowSynchronousIO = true;
             }
 
-            var path = "files/decrypt_temp." + format;
-
-            if (format == "string")
-                using (var stream = Request.Body)
-                {
-                    var text = new StreamReader(stream).ReadToEnd();
-                    return new TextModel() {Key = key, SourceText = text, ResultText = Cipher.Decrypt(key,text)};
-                }
-            else if (format == "docx" || format == "txt")
+            try
             {
-                using (var file = Request.Body)
-                {
-                    using (var stream = System.IO.File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+
+                var path = "files/decrypt_temp." + format;
+
+                if (format == "string")
+                    using (var stream = Request.Body)
                     {
-                        file.CopyTo(stream);
+                        var text = new StreamReader(stream).ReadToEnd();
+                        return new TextModel() {Key = key, SourceText = text, ResultText = Cipher.Decrypt(key, text)};
+                    }
+                else if (format == "docx" || format == "txt")
+                {
+                    using (var file = Request.Body)
+                    {
+                        using (var stream = System.IO.File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        {
+                            file.CopyTo(stream);
+                        }
+                    }
+
+                    if (format == "docx")
+                    {
+                        return FileCipher.Decrypt(path, key);
+                    }
+                    else
+                    {
+                        var text = System.IO.File.ReadAllText(path);
+                        var res = Cipher.Decrypt(key, text);
+                        return new TextModel() {Key = key, SourceText = text, ResultText = res};
                     }
                 }
-
-                if (format=="docx")
-                {
-                    return FileCipher.Decrypt(path, key);
-                }
                 else
-                {
-                    var text = System.IO.File.ReadAllText(path);
-                    var res = Cipher.Decrypt(key, text);
-                    return new TextModel() { Key = key, SourceText = text, ResultText = res };
-                }
+                    throw new FormatException("Неверный формат");
             }
-            else
-                throw new FormatException("Неверный формат");
+            catch (Exception e)
+            {
+                return new TextModel() { Key = key, SourceText = e.Message, ResultText = "Так не пойдет. Попробуйте по-другому" };
+            }
         }
 
     }
