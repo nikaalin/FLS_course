@@ -2,8 +2,6 @@ package com.example.cipher2.UI
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
-import com.example.cipher2.ProjectValues
 import com.example.cipher2.R
 import com.example.cipher2.exceptions.ApplicationException
 import com.example.cipher2.exceptions.FileAlreadyExists
@@ -21,7 +19,7 @@ class SaveFileDialog(
 
         saveNamedFileButton.setOnClickListener {
             try {
-                ProjectValues.fileNameToSave = fileNameEditText.text.toString()
+                activity.fileNameToSave = fileNameEditText.text.toString()
                 saveDocx()
                 this.dismiss()
             }catch(e:ApplicationException){
@@ -31,8 +29,8 @@ class SaveFileDialog(
     }
 
     private fun saveDocx() {
-        val name = ProjectValues.fileNameToSave
-        val type = ProjectValues.fileTypeToSave
+        val name = activity.fileNameToSave
+        val type = activity.fileTypeToSave
         val path = activity.getExternalFilesDir(type)?.path
 
         val file = File("$path/$name.$type")

@@ -1,6 +1,6 @@
 package com.example.cipher2.controllers
 
-import com.example.cipher2.ProjectValues.ip
+import com.example.cipher2.ip
 import com.example.cipher2.models.TextModel
 
 abstract class ICipherRequest {

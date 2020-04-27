@@ -1,17 +1,19 @@
 package com.example.cipher2.UI
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cipher2.ProjectValues.FILE_PICKER_REQUEST_CODE
-import com.example.cipher2.ProjectValues.defaultKey
-import com.example.cipher2.ProjectValues.fileUriToUpload
+import com.example.cipher2.FILE_PICKER_REQUEST_CODE
 import com.example.cipher2.R
 import com.example.cipher2.controllers.DocxCipherRequest
 import com.example.cipher2.controllers.ICipherRequest
 import com.example.cipher2.controllers.StringCipherRequest
 import com.example.cipher2.controllers.TxtCipherRequest
-import com.example.cipher2.exceptions.*
+import com.example.cipher2.defaultKey
+import com.example.cipher2.exceptions.ApplicationException
+import com.example.cipher2.exceptions.NoFileUploadException
+import com.example.cipher2.exceptions.NoKeyException
 import com.example.cipher2.models.TextModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
@@ -20,6 +22,11 @@ import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
+
+    var fileUriToUpload: Uri? = null
+    var fileNameToSave: String? = null
+    var fileTypeToSave: String? = "txt"
+
     var model: TextModel = TextModel("", "", "")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
