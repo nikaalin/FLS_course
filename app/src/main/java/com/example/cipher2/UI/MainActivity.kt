@@ -2,6 +2,7 @@ package com.example.cipher2.UI
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cipher2.ProjectValues.FILE_PICKER_REQUEST_CODE
 import com.example.cipher2.ProjectValues.defaultKey
@@ -11,11 +12,13 @@ import com.example.cipher2.controllers.DocxCipherRequest
 import com.example.cipher2.controllers.ICipherRequest
 import com.example.cipher2.controllers.StringCipherRequest
 import com.example.cipher2.controllers.TxtCipherRequest
+import com.example.cipher2.exceptions.*
 import com.example.cipher2.models.TextModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,21 +27,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        switchMode.isChecked = true
-        switchDefaultKey.isChecked = true
-        editTextKey.isEnabled = !switchDefaultKey.isChecked
-        formatRadioGroup.check(stringRadioButton.id)
-        buttonUploadFile.isEnabled = false
-        sourceEitText.isEnabled = !buttonUploadFile.isEnabled
-
-        formatRadioGroup.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                docxRadioButton.id -> buttonUploadFile.isEnabled = true
-                txtRadioButton.id -> buttonUploadFile.isEnabled = true
-                stringRadioButton.id -> buttonUploadFile.isEnabled = false
-            }
+        try {
+            switchMode.isChecked = true
+            switchDefaultKey.isChecked = true
+            editTextKey.isEnabled = !switchDefaultKey.isChecked
+            formatRadioGroup.check(stringRadioButton.id)
+            buttonUploadFile.isEnabled = false
             sourceEitText.isEnabled = !buttonUploadFile.isEnabled
-        }
+
+            formatRadioGroup.setOnCheckedChangeListener { _, checkedId ->
+                when (checkedId) {
+                    docxRadioButton.id -> buttonUploadFile.isEnabled = true
+                    txtRadioButton.id -> buttonUploadFile.isEnabled = true
+                    stringRadioButton.id -> buttonUploadFile.isEnabled = false
+                }
+                sourceEitText.isEnabled = !buttonUploadFile.isEnabled
+            }
 
             switchMode.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
@@ -58,8 +62,12 @@ class MainActivity : AppCompatActivity() {
                 pickFile()
             }
 
-        buttonSendRequest.setOnClickListener {
-            sendRequest()
+            buttonSendRequest.setOnClickListener {
+                sendRequest()
+            }
+
+        } catch (e: ApplicationException) {
+            e.toast(this)
         }
     }
 
@@ -81,13 +89,16 @@ class MainActivity : AppCompatActivity() {
             if (switchDefaultKey.isChecked)
                 defaultKey
             else editTextKey.text.toString()
+        if (key.isEmpty()) throw NoKeyException()
 
         when (formatRadioGroup.checkedRadioButtonId) {
             docxRadioButton.id -> {
+                if (fileUriToUpload == null) throw NoFileUploadException()
                 val inStream = contentResolver?.openInputStream(fileUriToUpload!!)
                 request = DocxCipherRequest(key, inStream)
             }
             txtRadioButton.id -> {
+                if (fileUriToUpload == null) throw NoFileUploadException()
                 val inStream = contentResolver?.openInputStream(fileUriToUpload!!)
                 request = TxtCipherRequest(key, inStream)
             }
@@ -99,18 +110,40 @@ class MainActivity : AppCompatActivity() {
 
 
         GlobalScope.launch {
-            if (switchMode.isChecked) {
-                request?.sendDecrypt()
-            } else {
-                request?.sendEncrypt()
-            }
-            model = request!!.response
-            MainScope().launch {
-                SuccessResultDialog(
-                    this@MainActivity,
-                    model
-                ).show()
-                buttonSendRequest.isEnabled = true
+            try {
+                if (switchMode.isChecked) {
+                    request?.sendDecrypt()
+                } else {
+                    request?.sendEncrypt()
+                }
+                model = request!!.response
+
+                MainScope().launch {
+                    when (request.status) {
+                        200 -> {
+                            SuccessResultDialog(
+                                this@MainActivity,
+                                model
+                            ).show()
+                            buttonSendRequest.isEnabled = true
+                        }
+                        else -> {
+                            Log.d("Request Status", request.status.toString())
+                            throw BadResponseException()
+                        }
+
+                    }
+
+                }
+
+            } catch (e: ApplicationException) {
+                MainScope().launch {
+                    e.toast(this@MainActivity)
+                }
+            } finally {
+                MainScope().launch {
+                    buttonSendRequest.isEnabled = true
+                }
             }
 
         }

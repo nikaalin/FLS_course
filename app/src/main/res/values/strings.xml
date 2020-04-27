@@ -22,7 +22,7 @@
     <string name="destination">Результат</string>
 
     <string name="format_text">Что будем шифровать?</string>
-    <string name="none_format_text">То, что я сам напишу</string>
+    <string name="none_format_text">А вот: </string>
 
     <string name="text_file_is_uploaded">Файл загружен</string>
 </resources>

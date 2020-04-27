@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.cipher2.ProjectValues
 import com.example.cipher2.R
+import com.example.cipher2.exceptions.FileAlreadyExists
 import kotlinx.android.synthetic.main.save_dialog.*
 import java.io.File
 
@@ -29,7 +30,10 @@ class SaveFileDialog(
         val type = ProjectValues.fileTypeToSave
         val path = activity.getExternalFilesDir(type)?.path
 
-        File("$path/$name.$type").writeText(activity.model.resultText)
+        val file = File("$path/$name.$type")
+        if (!file.exists())
+            file.writeText(activity.model.resultText)
+        else throw FileAlreadyExists()
     }
 
 }
