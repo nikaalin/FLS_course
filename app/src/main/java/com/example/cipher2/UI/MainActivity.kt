@@ -3,7 +3,6 @@ package com.example.cipher2.UI
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cipher2.ProjectValues
 import com.example.cipher2.ProjectValues.FILE_PICKER_REQUEST_CODE
 import com.example.cipher2.ProjectValues.defaultKey
 import com.example.cipher2.ProjectValues.fileUriToUpload
@@ -41,23 +40,23 @@ class MainActivity : AppCompatActivity() {
             sourceEitText.isEnabled = !buttonUploadFile.isEnabled
         }
 
-        switchMode.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                switchMode.text = resources.getText(R.string.title_decrypt)
-                buttonSendRequest.text = resources.getText(R.string.send_decrypt)
-            } else {
-                switchMode.text = resources.getText(R.string.title_encrypt)
-                buttonSendRequest.text = resources.getText(R.string.send_encrypt)
+            switchMode.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    switchMode.text = resources.getText(R.string.title_decrypt)
+                    buttonSendRequest.text = resources.getText(R.string.send_decrypt)
+                } else {
+                    switchMode.text = resources.getText(R.string.title_encrypt)
+                    buttonSendRequest.text = resources.getText(R.string.send_encrypt)
+                }
             }
-        }
 
-        switchDefaultKey.setOnCheckedChangeListener { _, isChecked ->
-            editTextKey.isEnabled = !isChecked
-        }
+            switchDefaultKey.setOnCheckedChangeListener { _, isChecked ->
+                editTextKey.isEnabled = !isChecked
+            }
 
-        buttonUploadFile.setOnClickListener {
-            pickFile()
-        }
+            buttonUploadFile.setOnClickListener {
+                pickFile()
+            }
 
         buttonSendRequest.setOnClickListener {
             sendRequest()
@@ -105,7 +104,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 request?.sendEncrypt()
             }
-            model = request!!.getTextModelResponse()
+            model = request!!.response
             MainScope().launch {
                 SuccessResultDialog(
                     this@MainActivity,
@@ -117,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun pickFile() {
+    private fun pickFile() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         intent.type = "*/*"

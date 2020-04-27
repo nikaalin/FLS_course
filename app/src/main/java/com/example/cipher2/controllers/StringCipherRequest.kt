@@ -9,11 +9,10 @@ import kotlinx.coroutines.withContext
 class StringCipherRequest(
     private val key: String,
     private val doc: String?
-) : ICipherRequest {
-    lateinit var response: TextModel
-    override fun getTextModelResponse(): TextModel {
-        return response
-    }
+) : ICipherRequest() {
+    override var response: TextModel = TextModel("", "", "")
+    override var status: Int = 777
+
 
     override suspend fun sendEncrypt() {
         post(encryptUrl(key, "string"))
@@ -24,11 +23,15 @@ class StringCipherRequest(
     }
 
     private suspend fun post(url: String) {
-        response = withContext(IO) {
-            return@withContext Fuel.post(url)
-                .set("Content-Type", "text/plain")
-                .timeout(Int.MAX_VALUE).timeoutRead(Int.MAX_VALUE)
-                .body(doc!!).responseObject<TextModel>().third.get()
-        }
+            val (_, response, result) = withContext(IO) {
+                return@withContext Fuel.post(url)
+                    .set("Content-Type", "text/plain")
+                    .timeout(Int.MAX_VALUE).timeoutRead(Int.MAX_VALUE)
+                    .body(doc!!).responseObject<TextModel>()
+            }
+            status = response.statusCode
+            this.response = result.get()
+
     }
+
 }

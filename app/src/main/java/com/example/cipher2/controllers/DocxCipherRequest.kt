@@ -10,11 +10,9 @@ import java.io.InputStream
 class DocxCipherRequest(
     private val key: String,
     private val doc: InputStream?
-) : ICipherRequest {
-    lateinit var response: TextModel
-    override fun getTextModelResponse(): TextModel {
-        return response
-    }
+) : ICipherRequest() {
+    override var response: TextModel = TextModel("", "", "")
+    override var status: Int = 777
 
     override suspend fun sendEncrypt() {
         post(encryptUrl(key, "docx"))
@@ -25,14 +23,16 @@ class DocxCipherRequest(
     }
 
     private suspend fun post(url: String) {
-        response = withContext(IO) {
+        val (_, response, result)  = withContext(IO) {
             return@withContext Fuel.post(url)
                 .set(
                     "Content-Type",
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 )
                 .timeout(Int.MAX_VALUE).timeoutRead(Int.MAX_VALUE)
-                .body(doc!!).responseObject<TextModel>().third.get()
+                .body(doc!!).responseObject<TextModel>()
         }
+        status = response.statusCode
+        this.response = result.get()
     }
 }
