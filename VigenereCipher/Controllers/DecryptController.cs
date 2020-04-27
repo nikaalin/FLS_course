@@ -59,7 +59,7 @@ namespace VigenereCipher.Controllers
                 else
                     throw new FormatException("Неверный формат");
             }
-            catch (Exception e)
+            catch (ApplicationException e)
             {
                 return new TextModel() { Key = key, SourceText = e.Message, ResultText = "Так не пойдет. Попробуйте по-другому" };
             }
