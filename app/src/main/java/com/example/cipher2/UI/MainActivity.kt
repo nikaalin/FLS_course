@@ -2,7 +2,6 @@ package com.example.cipher2.UI
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cipher2.ProjectValues.FILE_PICKER_REQUEST_CODE
 import com.example.cipher2.ProjectValues.defaultKey
@@ -18,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class MainActivity : AppCompatActivity() {
@@ -83,68 +81,67 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendRequest() {
-        buttonSendRequest.isEnabled = false
-        var request: ICipherRequest? = null
-        val key =
-            if (switchDefaultKey.isChecked)
-                defaultKey
-            else editTextKey.text.toString()
-        if (key.isEmpty()) throw NoKeyException()
+        try {
+            buttonSendRequest.isEnabled = false
+            var request: ICipherRequest? = null
+            val key =
+                if (switchDefaultKey.isChecked)
+                    defaultKey
+                else editTextKey.text.toString()
+            if (key.isEmpty()) throw NoKeyException()
 
-        when (formatRadioGroup.checkedRadioButtonId) {
-            docxRadioButton.id -> {
-                if (fileUriToUpload == null) throw NoFileUploadException()
-                val inStream = contentResolver?.openInputStream(fileUriToUpload!!)
-                request = DocxCipherRequest(key, inStream)
-            }
-            txtRadioButton.id -> {
-                if (fileUriToUpload == null) throw NoFileUploadException()
-                val inStream = contentResolver?.openInputStream(fileUriToUpload!!)
-                request = TxtCipherRequest(key, inStream)
-            }
-            stringRadioButton.id -> {
-                val text = sourceEitText.text.toString()
-                request = StringCipherRequest(key, text)
-            }
-        }
-
-
-        GlobalScope.launch {
-            try {
-                if (switchMode.isChecked) {
-                    request?.sendDecrypt()
-                } else {
-                    request?.sendEncrypt()
+            when (formatRadioGroup.checkedRadioButtonId) {
+                docxRadioButton.id -> {
+                    if (fileUriToUpload == null) throw NoFileUploadException()
+                    val inStream = contentResolver?.openInputStream(fileUriToUpload!!)
+                    request = DocxCipherRequest(key, inStream)
                 }
-                model = request!!.response
+                txtRadioButton.id -> {
+                    if (fileUriToUpload == null) throw NoFileUploadException()
+                    val inStream = contentResolver?.openInputStream(fileUriToUpload!!)
+                    request = TxtCipherRequest(key, inStream)
+                }
+                stringRadioButton.id -> {
+                    val text = sourceEitText.text.toString()
+                    request = StringCipherRequest(key, text)
+                }
+            }
 
-                MainScope().launch {
-                    when (request.status) {
-                        200 -> {
-                            SuccessResultDialog(
-                                this@MainActivity,
-                                model
-                            ).show()
-                            buttonSendRequest.isEnabled = true
-                        }
-                        else -> {
-                            Log.d("Request Status", request.status.toString())
-                            throw BadResponseException()
-                        }
+
+            GlobalScope.launch {
+                try {
+                    if (switchMode.isChecked) {
+                        request?.sendDecrypt()
+                    } else {
+                        request?.sendEncrypt()
+                    }
+                    model = request!!.response
+
+                    MainScope().launch {
+                        SuccessResultDialog(
+                            this@MainActivity,
+                            model
+                        ).show()
+                        buttonSendRequest.isEnabled = true
 
                     }
 
+
+                } catch (e: ApplicationException) {
+                    MainScope().launch {
+                        e.toast(this@MainActivity)
+                    }
+                } finally {
+                    MainScope().launch {
+                        buttonSendRequest.isEnabled = true
+                    }
                 }
 
-            } catch (e: ApplicationException) {
-                MainScope().launch {
-                    e.toast(this@MainActivity)
-                }
-            } finally {
-                MainScope().launch {
-                    buttonSendRequest.isEnabled = true
-                }
             }
+        } catch (e: ApplicationException) {
+            e.toast(this)
+        } finally {
+            buttonSendRequest.isEnabled = true
 
         }
     }

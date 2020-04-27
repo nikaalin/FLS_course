@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.example.cipher2.ProjectValues
 import com.example.cipher2.R
+import com.example.cipher2.exceptions.ApplicationException
 import com.example.cipher2.exceptions.FileAlreadyExists
 import kotlinx.android.synthetic.main.save_dialog.*
 import java.io.File
@@ -19,9 +20,13 @@ class SaveFileDialog(
 
 
         saveNamedFileButton.setOnClickListener {
-            ProjectValues.fileNameToSave = fileNameEditText.text.toString()
-            this.dismiss()
-            saveDocx()
+            try {
+                ProjectValues.fileNameToSave = fileNameEditText.text.toString()
+                saveDocx()
+                this.dismiss()
+            }catch(e:ApplicationException){
+                e.toast(activity)
+            }
         }
     }
 
