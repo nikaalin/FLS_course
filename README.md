@@ -10,6 +10,6 @@
 **<div style="text-align:center">*Запуск:*</div>**
 - Предварительно скачать и запустить API https://github.com/nikaalin/FLS_course/tree/coursework 
 - Для запуска проекта необходимо скачать исходный код и открыть проект в подходящей IDE (например, Android Studio).
-- Изменить значение ip на адрес хоста API в файле /app/src/main/java/com/example/cipher2/ProjectValues.kt 
-*адрес хоста можно узнать, запустив утилиту ipconfig в командной строке*
+- Изменить значение ip на адрес хоста API в файле /app/src/main/java/com/example/cipher2/ProjectValues.kt. 
+  *Адрес хоста можно узнать, запустив утилиту ipconfig в командной строке*
 - Запустить приложение на реальном устройстве/эмуляторе с ОС Android 8.0 или выше.
